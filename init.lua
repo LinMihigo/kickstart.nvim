@@ -271,6 +271,12 @@ require('lazy').setup({
   -- after the plugin has been loaded:
   --  config = function() ... end
 
+  -- lualine statusline
+  {
+    'nvim-lualine/lualine.nvim',
+    dependencies = {  'nvim-tree/nvim-web-devicons' }
+  },
+
   { -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
@@ -866,7 +872,7 @@ require('lazy').setup({
       -- Simple and easy statusline.
       --  You could remove this setup call if you don't like it,
       --  and try some other statusline plugin
-      local statusline = require 'mini.statusline'
+      local statusline = require 'lualine'
       -- set use_icons to true if you have a Nerd Font
       statusline.setup { use_icons = vim.g.have_nerd_font }
 
