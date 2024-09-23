@@ -276,6 +276,9 @@ require('lazy').setup({
     'nvim-lualine/lualine.nvim',
     dependencies = {  'nvim-tree/nvim-web-devicons' }
   },
+  {
+    'wakatime/vim-wakatime', lazy = false
+  },
 
   -- github themes
   { 'projekt0n/github-nvim-theme' },
