@@ -111,6 +111,8 @@ vim.opt.mouse = 'a'
 vim.opt.showmode = false
 
 vim.opt.expandtab = false
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
@@ -193,6 +195,18 @@ vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper win
 
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
+-- Command to convert spaces to tabs --
+vim.api.nvim_create_user_command('ConvertSpacesToTabs', function ()
+  local current_line = vim.fn.getline(1, '$')
+  for i, line in ipairs(current_line) do
+  -- Replace 4 spaces with a tab char
+    line = line:gsub('        ', 't') -- Replace 8 spaces
+    line = line:gsub('    ', '\t') -- Replace 4 spaces
+    -- Replace 4 spaces if they follow a tab (Handling mixed spaces or tabs)
+    line = line:gsub('\t%s*', '\t')
+    vim.fn.setline(i, line)
+  end
+end, {})
 
 -- Highlight when yanking (copying) text
 --  Try it with `yap` in normal mode
@@ -277,9 +291,14 @@ require('lazy').setup({
     'nvim-lualine/lualine.nvim',
     dependencies = {  'nvim-tree/nvim-web-devicons' }
   },
+
   {
     'wakatime/vim-wakatime', lazy = false
   },
+
+  { 'preservim/vim-markdown'  },
+
+  { 'iamcco/markdown-preview.nvim', ft = 'markdown', run = 'cd app && npm install' },
 
   -- github themes
   { 'projekt0n/github-nvim-theme' },
@@ -367,7 +386,11 @@ require('lazy').setup({
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
-      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
+      { 
+        'nvim-tree/nvim-web-devicons',
+        lazy = true,
+        enabled = vim.g.have_nerd_font
+      },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
